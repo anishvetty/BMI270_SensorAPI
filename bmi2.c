@@ -1981,11 +1981,14 @@ int8_t bmi2_get_regs(uint8_t reg_addr, uint8_t *data, uint16_t len, struct bmi2_
 
         if (dev->aps_status == BMI2_ENABLE)
         {
-            dev->delay_us(450, dev->intf_ptr);
+            /* ESP32-S3 HSM_FW: shortened from the stock 450us so that four
+             * sensors can be register-polled at up to 800Hz within budget. */
+            dev->delay_us(40, dev->intf_ptr);
         }
         else
         {
-            dev->delay_us(2, dev->intf_ptr);
+            /* ESP32-S3 HSM_FW: shortened from the stock 2us; see above. */
+            dev->delay_us(1, dev->intf_ptr);
         }
 
         if (dev->intf_rslt == BMI2_INTF_RET_SUCCESS)
